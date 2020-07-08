@@ -11,15 +11,15 @@
 #include "image.h"
 
 
-#define TEXTURA_DO_POSTER "poster.rgb"
-#define TEXTURA_DO_HAIKYUU "haikyuu.rgb"
-#define TEXTURA_NARUTO "naruto.rgb"
+#define TEXTURA_DO_POSTER "img/poster.rgb"
+#define TEXTURA_DO_HAIKYUU "img/haikyuu.rgb"
+#define TEXTURA_NARUTO "img/naruto.rgb"
 
 
-#define TEXTURA_DO_CHAO "piso.rgb"
-#define TEXTURA_MADEIRA "madeira.rgb"
-#define TEXTURA_DO_MONITOR "logo_ft.rgb"
-#define TEXTURA_UNICAMP "unicamp.rgb"
+#define TEXTURA_DO_CHAO "img/piso.rgb"
+#define TEXTURA_MADEIRA "img/madeira.rgb"
+#define TEXTURA_DO_MONITOR "img/logo_ft.rgb"
+#define TEXTURA_UNICAMP "img/unicamp.rgb"
 
 #define PI 3.1415
 GLfloat tetaxz = 0;

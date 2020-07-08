@@ -15,6 +15,8 @@
 #define TEXTURA_DO_HAIKYUU "img/haikyuu.rgb"
 #define TEXTURA_NARUTO "img/naruto.rgb"
 
+#define TEXTURA_COBERTOR "img/cobertor.rgb"
+#define TEXTURA_PORTA "img/door.rgb"
 
 #define TEXTURA_DO_CHAO "img/piso.rgb"
 #define TEXTURA_MADEIRA "img/madeira.rgb"
@@ -31,6 +33,10 @@ GLfloat look[3] = { 0.0,3.0,0.0 };
 
 //var textura
 GLuint  textura_chao;
+GLuint  textura_cobertor;
+GLuint  textura_porta;
+
+
 GLuint  textura_poster;
 GLuint  textura_haikyuu;
 GLuint  textura_naruto;
@@ -48,6 +54,21 @@ GLfloat planotext[4][2]={
   {+1,+1},
   {-1,+1}
 };
+
+GLfloat cobertortext[4][2]={
+  {0,0},
+  {+1,0},
+  {+1,+1},
+  {0,+1}
+};
+
+GLfloat portatext[4][2]={
+  {0,0},
+  {+1,0},
+  {+1,+1},
+  {0,+1}
+};
+
 
 GLfloat postertext[4][2]={
   {0,0},
@@ -113,6 +134,13 @@ GLfloat azul_difusa[]    = { 0.0, 0.2, 0.5, 1.0 };
 GLfloat azul_especular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat azul_brilho[]    = { 40.0 };
 
+GLfloat branco_difusa[]    = { 0.0, 0.5, 0.8, 1.0 };
+GLfloat branco_especular[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat branco_brilho[]    = { 15.0 };
+
+GLfloat amarelo_difusa[]    = { 0.5, 0.5, 0.0, 1.0 };
+GLfloat amarelo_especular[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat amarelo_brilho[]    = { 35.0 };
 
 //acrescentar aqui opções de cores pros livros diferentes
 GLfloat livro_difusa[]    = { 0.6, 0.5, 0.0, 1.0 };  //
@@ -146,7 +174,6 @@ void display(void){
 	  glShadeModel(GL_FLAT);
 	}
 	 
-	 
 	//Rotate com R ou r
   	glPushMatrix();
 	glRotatef ((GLfloat) rodatudo, 0.0, 1.0, 0.0); //Rotate do R 
@@ -154,9 +181,9 @@ void display(void){
     //Chão
 	
 	//iluminação do chao
-    /*glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, chao_difusa);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, chao_difusa);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, chao_especular);
-  	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, chao_brilho);*/
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, chao_brilho);
   	
 	//Textura do chao
 	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
@@ -258,15 +285,74 @@ void display(void){
   	glDisable(GL_TEXTURE_2D); //encerra textura*/
 
   	
-  	//quadro quatro
-  	/*
-  		glBegin(GL_QUADS);
-	    	glColor3f(0.5, 0.0, 0.0);
-	  			glVertex3f(2.8,10,20);
-	  			glVertex3f(17,10,20);
-	 	 		glVertex3f(17,20,20);
-	 	 		glVertex3f(2.8,20,20);
-		glEnd();*/
+  	//cama
+  	
+  	  	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, branco_difusa);
+  		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, branco_especular);
+  		glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, branco_brilho);
+			//base
+			glPushMatrix();
+				glTranslatef(-10, 2.4, 15.0);
+				glScalef(20, 3, 10.0);
+				glutSolidCube(1.0);
+			glPopMatrix();
+			
+			//travesseiro
+			/*glPushMatrix();
+				glTranslatef(-17, 4.5, 15.0);
+				glScalef(5, 1.5, 5);
+				glutSolidCube(1.0);
+			glPopMatrix();*/
+			
+			//cobertor
+			//textura pcobertor
+		  	glEnable(GL_TEXTURE_2D);  //seta textura
+			glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
+		  	glBindTexture(GL_TEXTURE_2D,textura_cobertor);
+	
+	  //superfice cobertor
+	    glBegin(GL_QUADS);
+			glTexCoord2fv(cobertortext[0]);  glVertex3f(0,4,10);
+	  		glTexCoord2fv(cobertortext[1]);  glVertex3f(-17,4,10);
+	 	 	glTexCoord2fv(cobertortext[2]);  glVertex3f(-17,4,20);
+	 	 	glTexCoord2fv(cobertortext[3]);  glVertex3f(0,4,20);
+		glEnd();
+		
+		glBegin(GL_QUADS);
+			glTexCoord2fv(cobertortext[0]);  glVertex3f(0,0,9.9);
+	  		glTexCoord2fv(cobertortext[1]);  glVertex3f(-17,0,9.9);
+	 	 	glTexCoord2fv(cobertortext[2]);  glVertex3f(-17,4,9.9);
+	 	 	glTexCoord2fv(cobertortext[3]);  glVertex3f(0,4,9.9);
+		glEnd();
+		
+				glBegin(GL_QUADS);
+			glTexCoord2fv(cobertortext[0]);  glVertex3f(0,0,20.1);
+	  		glTexCoord2fv(cobertortext[1]);  glVertex3f(-17,0,20.1);
+	 	 	glTexCoord2fv(cobertortext[2]);  glVertex3f(-17,4,20.1);
+	 	 	glTexCoord2fv(cobertortext[3]);  glVertex3f(0,4,20.1);
+		glEnd();
+		
+  	glDisable(GL_TEXTURE_2D); //encerra textura*/
+  	
+  	
+  	//porta
+  	  	glEnable(GL_TEXTURE_2D);  //seta textura
+	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
+  	glBindTexture(GL_TEXTURE_2D,textura_porta);
+  	
+  	  	glBegin(GL_QUADS);
+			glTexCoord2fv(portatext[0]);glVertex3f(-20,15,0);
+	  		glTexCoord2fv(portatext[1]);glVertex3f(-20,0,0);
+	 	 	glTexCoord2fv(portatext[2]);glVertex3f(-20,0,-10);
+	 	 	glTexCoord2fv(portatext[3]);glVertex3f(-20,15,-10);
+		glEnd();
+				
+				glDisable(GL_TEXTURE_2D); //encerra textura*/
+			
+			
+			
+			
+		
   	
   	
 	 //cadeira
@@ -423,6 +509,45 @@ void display(void){
   	
   	glDisable(GL_TEXTURE_2D); //encerra textura
 	
+	
+	
+	//lampada
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, amarelo_difusa);
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, amarelo_especular);
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, amarelo_brilho);
+	
+	glPushMatrix();
+	glTranslatef( 0.0, 20.0, 0.0);
+	glutSolidSphere(0.5, 10, 8);
+	glPopMatrix();
+	
+	//suporte lampada
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, chaleira_difusa);
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, chaleira_especular);
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, chaleira_brilho);
+	
+	glPushMatrix();
+	GLUquadricObj *quadric;
+	quadric = gluNewQuadric();
+  	gluQuadricTexture(quadric, GL_TRUE);
+  	glTranslatef(0, 20.8, 0.0);
+	glRotated(90, 1.0, 0.0, 0.0 );
+	glTranslatef(0, 0, 0);
+  	gluCylinder(quadric, 0.2, 1.5, 1, 12, 3);
+  	glPopMatrix();
+  	
+  	//fio lampada
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, chaleira_difusa);
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, chaleira_especular);
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, chaleira_brilho);
+  	
+	glPushMatrix();
+	glTranslatef(0, 21.0, 0);
+	glScalef(0.3, 2.5, 0.3);
+	glutSolidCube(1.0);
+	glPopMatrix();
+	
+	
 
 	//maça
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, vermelho_difusa);
@@ -461,9 +586,13 @@ void display(void){
 	
 	
 	//copo
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, chaleira_difusa);
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, chaleira_especular);
+  	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, chaleira_brilho);
+	
 	glColor3f(0.6, 0.6, 0.6);
 	glPushMatrix();
-	GLUquadricObj *quadric;
+	//GLUquadricObj *quadric;
 	quadric = gluNewQuadric();
   	gluQuadricTexture(quadric, GL_TRUE);
   	glTranslatef(10.5, 7.5, -2.0);
@@ -727,6 +856,60 @@ void carregar_texturas(void){
   	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
  	 glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
  	 glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
+ 	 
+ 	  	  	   /* textura do cobertor*/
+  
+    glGenTextures(1, &textura_cobertor);
+  	glBindTexture(GL_TEXTURE_2D, textura_cobertor);
+  
+  	if(!(img=ImageLoad(TEXTURA_COBERTOR))) {
+    	fprintf(stderr,"Error reading a texture.\n");
+    	exit(-1);
+  	}
+
+  	gluerr=gluBuild2DMipmaps(GL_TEXTURE_2D, 3, 
+			   img->sizeX, img->sizeY, 
+			   GL_RGB, GL_UNSIGNED_BYTE, 
+			   (GLvoid *)(img->data));
+  	if(gluerr){
+ 	   fprintf(stderr,"GLULib%s\n",gluErrorString(gluerr));
+ 	   exit(-1);
+ 	}
+ 	
+ 	  	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+ 	 glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+  	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+ 	 glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+ 	 glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
+ 	 
+ 	 
+ 	 
+ 	  	  	  	   /* textura porta*/
+  
+    glGenTextures(1, &textura_porta);
+  	glBindTexture(GL_TEXTURE_2D, textura_porta);
+  
+  	if(!(img=ImageLoad(TEXTURA_PORTA))) {
+    	fprintf(stderr,"Error reading a texture.\n");
+    	exit(-1);
+  	}
+
+  	gluerr=gluBuild2DMipmaps(GL_TEXTURE_2D, 3, 
+			   img->sizeX, img->sizeY, 
+			   GL_RGB, GL_UNSIGNED_BYTE, 
+			   (GLvoid *)(img->data));
+  	if(gluerr){
+ 	   fprintf(stderr,"GLULib%s\n",gluErrorString(gluerr));
+ 	   exit(-1);
+ 	}
+ 	
+ 	  	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+ 	 glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+  	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+ 	 glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+ 	 glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
+  
+  
   
 }
 

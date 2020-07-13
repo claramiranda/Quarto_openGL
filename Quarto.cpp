@@ -19,10 +19,18 @@
 #define TEXTURA_COBERTOR "img/cobertor.rgb"
 #define TEXTURA_PORTA "img/door.rgb"
 
-#define TEXTURA_DO_CHAO "img/piso.rgb"
+#define TEXTURA_DO_CHAO "img/chao.rgb"
 #define TEXTURA_MADEIRA "img/madeira.rgb"
 #define TEXTURA_DO_MONITOR "img/ft.rgb"
 #define TEXTURA_UNICAMP "img/unicamp.rgb"
+
+#define PI 3.1415
+GLfloat tetaxz = 0;
+GLfloat raioxz = 6;
+GLfloat obs[3] = { 0.0,7.0,0.0 };
+GLfloat look[3] = { 0.0,3.0,0.0 };
+GLint movemaca = 0;
+GLint direcao = 1;
 
 
 //variaveis de textura
@@ -165,6 +173,7 @@ void display(void){
 	glDepthMask(GL_TRUE);
 	glClearColor(1.0,1.0,1.0,1.0);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	
 	if(gouraud){
 	  glShadeModel(GL_SMOOTH);
 	}
@@ -550,6 +559,7 @@ void display(void){
 	glPushMatrix();
 		glTranslatef(1.0, 7.3, -3.0);
 		glutSolidSphere(0.5, 10, 8);
+		glVertex2i(movemaca + 200, 210);
 	glPopMatrix();
 
 	//talo da maça
@@ -903,6 +913,25 @@ void keyboard(unsigned char key, int x, int y){
   }
 }
 
+void maca(int passo)
+{
+	if (direcao == 1)
+	{
+		movemaca += 1;
+		if (movemaca == 290) direcao = 0;
+	}
+
+	else
+	{
+		movemaca -= 1;
+		if (movemaca == -90) direcao = 1;
+	}
+	glutPostRedisplay();
+	glutTimerFunc(10, maca, 1);
+
+}
+
+
 void init(void){
   glClearColor (1.0f, 0.5f, 1.0f, 1.0f);
   glEnable(GL_DEPTH_TEST);
@@ -938,6 +967,7 @@ int main(int argc, char** argv){
   
   glutDisplayFunc(display); 
   glutReshapeFunc(reshape);
+  glutTimerFunc(10, maca, 1);
   glutKeyboardFunc(keyboard);
   glutMainLoop();
   return 0;

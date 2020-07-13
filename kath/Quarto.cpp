@@ -1,9 +1,11 @@
  //Prof. Marco Antonio, abr/2020, ST765 FT UNICAMP
-// Programa baseado no exercício "Parquinho.c" e "Jato.c"
-// Aplicação de texturas
+// Programa baseado no exercÃ­cio "Parquinho.c" e "Jato.c"
+// AplicaÃ§Ã£o de texturas
 // Clara Anna Miranda - 155041
 // Katherine Rocha - 106768
  
+ 
+ //codigo da kath
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -26,6 +28,8 @@ GLfloat tetaxz = 0;
 GLfloat raioxz = 6;
 GLfloat obs[3] = { 0.0,7.0,0.0 };
 GLfloat look[3] = { 0.0,3.0,0.0 };
+GLint movemaca = 0;
+GLint direcao = 1;
 
 
 
@@ -114,7 +118,7 @@ GLfloat azul_especular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat azul_brilho[]    = { 40.0 };
 
 
-//acrescentar aqui opções de cores pros livros diferentes
+//acrescentar aqui opÃ§Ãµes de cores pros livros diferentes
 GLfloat livro_difusa[]    = { 0.6, 0.5, 0.0, 1.0 };  //
 GLfloat livro_especular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat livro_brilho[]    = { 40.0 };
@@ -151,9 +155,9 @@ void display(void){
   	glPushMatrix();
 	glRotatef ((GLfloat) rodatudo, 0.0, 1.0, 0.0); //Rotate do R 
 
-    //Chão
+    //ChÃ£o
 	
-	//iluminação do chao
+	//iluminaÃ§Ã£o do chao
     /*glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, chao_difusa);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, chao_especular);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, chao_brilho);*/
@@ -424,7 +428,7 @@ void display(void){
   	glDisable(GL_TEXTURE_2D); //encerra textura
 	
 
-	//maça
+	//maÃ§a
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, vermelho_difusa);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, vermelho_especular);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, vermelho_brilho);
@@ -433,9 +437,10 @@ void display(void){
 	glPushMatrix();
 	glTranslatef(1.0, 7.3, -3.0);
 	glutSolidSphere(0.5, 10, 8);
+	glVertex2i(movemaca + 200, 210);
 	glPopMatrix();
 
-	//cabo Maça
+	//cabo MaÃ§a
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, verde_difusa);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, verde_especular);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, verde_brilho);
@@ -765,6 +770,25 @@ case 'T':
   }
 }
 
+
+void maca(int passo)
+{
+	if (direcao == 1)
+	{
+		movemaca += 1;
+		if (movemaca == 290) direcao = 0;
+	}
+
+	else
+	{
+		movemaca -= 1;
+		if (movemaca == -90) direcao = 1;
+	}
+	glutPostRedisplay();
+	glutTimerFunc(10, maca, 1);
+
+}
+
 void init(void){
   glClearColor (1.0f, 0.5f, 1.0f, 1.0f);
   glEnable(GL_DEPTH_TEST);
@@ -802,9 +826,11 @@ int main(int argc, char** argv){
   init ();
   glutDisplayFunc(display); 
   glutReshapeFunc(reshape);
+  glutTimerFunc(10, maca, 1);
   glutKeyboardFunc(keyboard);
   glutMainLoop();
   return 0;
 }
+
 
 

@@ -24,6 +24,12 @@
 #define TEXTURA_DO_MONITOR "img/ft.rgb"
 #define TEXTURA_UNICAMP "img/unicamp.rgb"
 
+//testes mover maca
+int PASSOS = 0;
+float macaX, macaY, macaZ;
+float taloX, taloY, taloZ;
+
+
 #define PI 3.1415
 GLfloat tetaxz = 0;
 GLfloat raioxz = 6;
@@ -557,9 +563,9 @@ void display(void){
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, vermelho_especular);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, vermelho_brilho);
 	glPushMatrix();
-		glTranslatef(1.0, 7.3, -3.0);
+		//glTranslatef(1.0, 7.3, -3.0); 
+		glTranslatef(macaX, macaY, macaZ);
 		glutSolidSphere(0.5, 10, 8);
-		glVertex2i(movemaca + 200, 210);
 	glPopMatrix();
 
 	//talo da maça
@@ -567,8 +573,10 @@ void display(void){
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, verde_especular);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, verde_brilho);
 	glPushMatrix();
-		glTranslatef(1.0, 7.8, -3.0);
+		//glTranslatef(1.0, 7.8, -3.0);
+		glTranslatef(taloX, taloY, taloZ);
 		glScalef(0.2, 0.5, 0.2);
+		//glVertex2i(movemaca + 200, 210);
 		glutSolidCube(1.0);
 	glPopMatrix();
 
@@ -662,12 +670,14 @@ void display(void){
 		glScalef(5.0, 1, 3);
 		glutSolidCube(1.0);
 	glPopMatrix();
-	
+
+  
   glPopMatrix();
-  glutSwapBuffers();
+  glutSwapBuffers();		
 }
 
-void carregar_texturas(void){
+void carregar_texturas(void)
+{
   IMAGE *img;
   GLenum gluerr;
 
@@ -886,7 +896,8 @@ void carregar_texturas(void){
  	    glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
 }
 
-void reshape (int w, int h){
+void reshape (int w, int h)
+{
   glViewport (0, 0, (GLsizei) w, (GLsizei) h);
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
@@ -897,7 +908,8 @@ void reshape (int w, int h){
   
 }
 
-void keyboard(unsigned char key, int x, int y){
+void keyboard(unsigned char key, int x, int y)
+{
   switch (key) {
  case 'r':
     rodatudo = (rodatudo + 5) % 360;
@@ -907,6 +919,10 @@ void keyboard(unsigned char key, int x, int y){
     rodatudo = (rodatudo - 5) % 360;
     glutPostRedisplay();
     break;
+  case 'O':
+    PASSOS = 0;
+    break;    
+
    case 27:                                         // tecla Esc (encerra o programa)
 	exit(0);
 	break;
@@ -915,24 +931,46 @@ void keyboard(unsigned char key, int x, int y){
 
 void maca(int passo)
 {
-	if (direcao == 1)
-	{
-		movemaca += 1;
-		if (movemaca == 290) direcao = 0;
-	}
+	if(PASSOS == 0){
+		//printf("Primeira passada \n");
 
-	else
-	{
-		movemaca -= 1;
-		if (movemaca == -90) direcao = 1;
+		//valores iniciais da maça
+		macaX = 1.0;
+		macaY =  7.5;
+		macaZ = -3.0;
+		
+		taloX = 1.0;
+		taloY = macaY + 0.5;
+		taloZ = -3.0;
 	}
+	else {
+		if(PASSOS % 25 == 0 && PASSOS <=850)
+		{
+			//roda a tela
+			rodatudo = (rodatudo + 5) % 360;
+   			glutPostRedisplay();
+		}
+		if(PASSOS % 10 == 0 && macaX >= -0.5){ //move maça x
+			macaX = macaX - 0.1;	
+			taloX = macaX - 0.1;
+		}
+		else {
+			if (PASSOS % 10 == 0 && macaY >= 1) // move maça y
+			{
+				macaY = macaY -0.1;	
+				taloY = macaY + 0.5;	
+			}		
+		}
+	}
+	PASSOS++;
 	glutPostRedisplay();
 	glutTimerFunc(10, maca, 1);
 
 }
 
 
-void init(void){
+void init(void)
+{
   glClearColor (1.0f, 0.5f, 1.0f, 1.0f);
   glEnable(GL_DEPTH_TEST);
   carregar_texturas();
@@ -956,20 +994,24 @@ void init(void){
 }
 
 
-int main(int argc, char** argv){
+int main(int argc, char** argv)
+{
   glutInit(&argc, argv);
   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-  glutInitWindowSize (500, 500); 
-  glutInitWindowPosition (100, 100);
+  glutInitWindowSize (800, 800); 
+  glutInitWindowPosition (0, 0);
   glutCreateWindow ("Quarto de um otaku");
   
   init ();
   
   glutDisplayFunc(display); 
   glutReshapeFunc(reshape);
+  
   glutTimerFunc(10, maca, 1);
+  
   glutKeyboardFunc(keyboard);
   glutMainLoop();
+  
   return 0;
 }
 

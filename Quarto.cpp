@@ -2,6 +2,7 @@
 // Trabalho final de Computação Gráfica - 1o semestre 2020
 // Clara Anna Miranda - 155041
 // Katherine Rocha - 106768
+
  
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,35 +10,23 @@
 #include <GL/glut.h>
 #include "image.h"
 
-//declaracao de constantes
+//declaracao de constantes de textura
 #define TEXTURA_DO_POSTER "img/yurionice.rgb"
 #define TEXTURA_DO_HAIKYUU "img/haikyuu.rgb"
 #define TEXTURA_NARUTO "img/naruto.rgb"
 #define TEXTURA_KIMETSU "img/kimetsu.rgb"
 #define TEXTURA_EVANGELION "img/evangelion.rgb"
-
 #define TEXTURA_COBERTOR "img/cobertor.rgb"
 #define TEXTURA_PORTA "img/door.rgb"
-
 #define TEXTURA_DO_CHAO "img/chao.rgb"
-#define TEXTURA_MADEIRA "img/madeira.rgb"
 #define TEXTURA_DO_MONITOR "img/ft.rgb"
 #define TEXTURA_UNICAMP "img/unicamp.rgb"
 
-//testes mover maca
+//variaveis para controlar movimento
 int PASSOS = 0;
-float macaX, macaY, macaZ;
-float taloX, taloY, taloZ;
-
-
-#define PI 3.1415
-GLfloat tetaxz = 0;
-GLfloat raioxz = 6;
-GLfloat obs[3] = { 0.0,7.0,0.0 };
-GLfloat look[3] = { 0.0,3.0,0.0 };
-GLint movemaca = 0;
-GLint direcao = 1;
-
+float macaX, macaY, macaZ, macaA;
+float taloX, taloY, taloZ, taloA;
+float livro3X, livro3Y, livro3Z, livro3A;
 
 //variaveis de textura
 GLuint  textura_chao;
@@ -50,7 +39,6 @@ GLuint  textura_monitor;
 GLuint  textura_unicamp;
 GLuint  textura_evangelion;
 GLuint  textura_kimetsu;
-
 
 //var mudanca perspectiva
 static int rodatudo = 0;
@@ -155,7 +143,7 @@ GLfloat amarelo_especular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat amarelo_brilho[]    = { 65.0 };
 
 //livro
-GLfloat livro_difusa[]    = { 0.6, 0.5, 0.0, 1.0 };  //
+GLfloat livro_difusa[]    = { 0.6, 0.5, 0.0, 1.0 };  
 GLfloat livro_especular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat livro_brilho[]    = { 40.0 };
 
@@ -308,10 +296,10 @@ void display(void){
   	glBindTexture(GL_TEXTURE_2D,textura_kimetsu);
   	//Modelagem do plano que vai segurar a textura
 	glBegin(GL_QUADS); 
-	  		glTexCoord2fv(postertext[0]);  glVertex3f(-20,10,5);
-	  		glTexCoord2fv(postertext[1]);  glVertex3f(-20,10,18);
-	 	 	glTexCoord2fv(postertext[2]);  glVertex3f(-20,20,18);
-	 	 	glTexCoord2fv(postertext[3]);  glVertex3f(-20,20,5);
+	  		glTexCoord2fv(postertext[0]);  glVertex3f(-20.6,10,5);
+	  		glTexCoord2fv(postertext[1]);  glVertex3f(-20.6,10,18);
+	 	 	glTexCoord2fv(postertext[2]);  glVertex3f(-20.6,20,18);
+	 	 	glTexCoord2fv(postertext[3]);  glVertex3f(-20.6,20,5);
 	glEnd();
   	glDisable(GL_TEXTURE_2D); //encerra textura
   	
@@ -337,10 +325,10 @@ void display(void){
   	glBindTexture(GL_TEXTURE_2D,textura_evangelion);
   	//Modelagem do plano que vai segurar a textura
 	glBegin(GL_QUADS); 
-	  		glTexCoord2fv(postertext[0]);  glVertex3f(20,10,5);
-	  		glTexCoord2fv(postertext[1]);  glVertex3f(20,10,-10);
-	 	 	glTexCoord2fv(postertext[2]);  glVertex3f(20,20,-10);
-	 	 	glTexCoord2fv(postertext[3]);  glVertex3f(20,20,5);
+	  		glTexCoord2fv(postertext[0]);  glVertex3f(20.7,10,5);
+	  		glTexCoord2fv(postertext[1]);  glVertex3f(20.7,10,-10);
+	 	 	glTexCoord2fv(postertext[2]);  glVertex3f(20.7,20,-10);
+	 	 	glTexCoord2fv(postertext[3]);  glVertex3f(20.7,20,5);
 	glEnd();
   	glDisable(GL_TEXTURE_2D); //encerra textura
   	
@@ -564,21 +552,25 @@ void display(void){
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, vermelho_brilho);
 	glPushMatrix();
 		//glTranslatef(1.0, 7.3, -3.0); 
+		glRotated(macaA, macaX, macaY, macaZ);
 		glTranslatef(macaX, macaY, macaZ);
 		glutSolidSphere(0.5, 10, 8);
 	glPopMatrix();
-
 	//talo da maça
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, verde_difusa);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, verde_especular);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, verde_brilho);
 	glPushMatrix();
 		//glTranslatef(1.0, 7.8, -3.0);
+		glRotated(taloA, taloX, taloY, taloZ);
 		glTranslatef(taloX, taloY, taloZ);
 		glScalef(0.2, 0.5, 0.2);
 		//glVertex2i(movemaca + 200, 210);
 		glutSolidCube(1.0);
 	glPopMatrix();
+
+
+
 
 	//objeto Chakeira
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, chaleira_difusa);
@@ -589,6 +581,10 @@ void display(void){
 		glutSolidTeapot(1.0);
 	glPopMatrix();
 	
+	
+	
+	
+	
 	//copo
 	glPushMatrix();
 		quadric = gluNewQuadric();
@@ -598,6 +594,9 @@ void display(void){
 		glTranslatef(0, 0, 0);
 	  	gluCylinder(quadric, 0.5, 0.5, 1, 12, 3);
   	glPopMatrix();
+	
+	
+	
 	
 	//prateleira
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, madeira_difusa);
@@ -635,11 +634,11 @@ void display(void){
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, livro_especular);
   	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, livro_brilho);
 	glPushMatrix();
-		glTranslatef(-6, 17, -18);
+		glTranslatef(livro3X, livro3Y, livro3Z);
+		glRotated(livro3A, livro3X, livro3Y, livro3Z);
 		glScalef(1.0, 5, 3);
 		glutSolidCube(1.0);
-	glPopMatrix();
-	
+	glPopMatrix(); 
 	//livros deitados
 	//livro deitado 1
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, azul_difusa);
@@ -677,8 +676,8 @@ void display(void){
 }
 
 void carregar_texturas(void)
-{
-  IMAGE *img;
+{ 
+	IMAGE *img;
   GLenum gluerr;
 
   /* textura do chao */
@@ -932,34 +931,62 @@ void keyboard(unsigned char key, int x, int y)
 void maca(int passo)
 {
 	if(PASSOS == 0){
-		//printf("Primeira passada \n");
-
 		//valores iniciais da maça
 		macaX = 1.0;
-		macaY =  7.5;
+		macaY =  7.3; //7.3
 		macaZ = -3.0;
+		macaA = 0;
 		
 		taloX = 1.0;
 		taloY = macaY + 0.5;
 		taloZ = -3.0;
+		taloA = 0 ;
+		
+		livro3X = -6;
+		livro3Y = 17;
+		livro3Z = - 18;
+		livro3A = 0;
+
 	}
 	else {
-		if(PASSOS % 25 == 0 && PASSOS <=850)
+		if(PASSOS % 25 == 0 && PASSOS <=1800)
 		{
 			//roda a tela
 			rodatudo = (rodatudo + 5) % 360;
-   			glutPostRedisplay();
+   		//	glutPostRedisplay();
 		}
-		if(PASSOS % 10 == 0 && macaX >= -0.5){ //move maça x
+		if(PASSOS % 5 == 0 && macaX >= -0.5){ //move maça x
 			macaX = macaX - 0.1;	
 			taloX = macaX - 0.1;
 		}
 		else {
-			if (PASSOS % 10 == 0 && macaY >= 1) // move maça y
+			if (PASSOS % 5 == 0 && macaY >= 1) // move maça y
 			{
 				macaY = macaY -0.1;	
 				taloY = macaY + 0.5;	
-			}		
+				//taloA++;
+			}
+			if (PASSOS % 2 == 0 && macaY >= 1 )
+			{
+				macaA--;
+			//	taloA = taloA + 0.5;
+			//	printf("talo A = %d\n",taloA);
+			}
+		}
+		if (PASSOS >=1800 )
+		{
+			if(PASSOS % 15 == 0 && livro3X <= -4.0 )
+			{
+				livro3X = livro3X + 1;
+			}
+			else {
+				if(PASSOS % 3 == 0 && livro3Y >= 0.8 && livro3X >= -4)
+				{
+					
+					livro3A = livro3A + 1.6;
+					livro3Y -= 0.3;
+				}
+			}
 		}
 	}
 	PASSOS++;
